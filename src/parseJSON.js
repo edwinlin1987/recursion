@@ -66,16 +66,38 @@ var parseJSON = function(json) {
   	if (capture == '.') { number += next() }
   	while ((/\d/).test(capture)) { number += next() }
   	return number = +number;
-  	
   }
 
   // Function for parsing strings - INCOMPLETE
-  var phrase = function(text) {
+  var phrase = function() {
+  	var string = '';
+  	if (capture == '"') {
+  		next();
+  		while (capture != '"') {
+  			if (capture == '\\') {
+  				next();
+  				if (capture == '\\') { string += '\\'; }
+  				if (capture == '"') { string += '\"'; }
+  				if (capture == 'n') { string += '\n'; }
+  				if (capture == 'r') { string += '\r'; }
+  				if (capture == 'v') { string += '\v'; }
+  				if (capture == 't') { string += '\t'; }
+  				if (capture == 'b') { string += '\b'; }
+  				if (capture == 'f') { string += '\f'; }
+  			}
+  			string += next();
+  		}
+  		next();
+  		return string;
+  	}
+  	throw new Exception('Was expecting a string') 
   	
 	}
 
   // Function for parsing arrays - INCOMPLETE
   var array = function(text) {
+  	var list = [];
+  	if
   	
   }
 
