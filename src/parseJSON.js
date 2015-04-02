@@ -59,7 +59,13 @@ var parseJSON = function(json) {
 	}
 
 	// Function for parsing numbers
-  var num = function(text) {
+  var num = function() {
+  	var number = ''; 
+  	if (capture == '-') { number += next() }
+  	while ((/\d/).test(capture)) { number += next() }
+  	if (capture == '.') { number += next() }
+  	while ((/\d/).test(capture)) { number += next() }
+  	return number = +number;
   	
   }
 
