@@ -9,77 +9,72 @@ var parseJSON = function(json) {
 
 
   function nextChar(item) {
-  	index++;
-  	if (item == undefined) {
-  		return json[index];
+  	if (item != capture) {
+  		throw new Exception(item + 'does not match' + capture);
   	}
-  	return (json[index] == item);
+  	capture = json[index];
+  	index++;
+  	return capture;
   }
 
 
 
-  //skipping whitespaces
-  if (json[index] == ' ') {
-  	index++;
+  //Removes whitespace from either end of a segment of text
+  var skip = function(text) {
+  }
+  
+
+
+  //Function for running through parse tests
+
+  var parse = function(text) {
+
   }
 
 
 
   // Function for parsing booleans and null values
-  var boolNull = function(text) {
-  	if (text == 'true') { return true } 
-  	if (text == 'false') { return false }
-    if (text == 'null') { return null }
-	  throw new Exception('flawed json, was expecting true, false, or null');
+  var boolNull = function() {
+  	if (capture == 't') { 
+  		nextChar('t');
+  		nextChar('r');
+  		nextChar('u');
+  		nextChar('e');
+  		return true; 
+  	} else if (capture == 'f') { 
+  		nextChar('f');
+  		nextChar('a');
+  		nextChar('l');
+  		nextChar('s');
+  		nextChar('e');
+  		return false; 
+  	} else if (capture == 'n') { 
+  		nextChar('n');
+  		nextChar('u');
+  		nextChar('l');
+  		nextChar('l');
+  		return null; 
+  	}
+	  throw new Exception('Was expecting true, false, or null');
 	}
 
 	// Function for parsing numbers
   var num = function(text) {
-  	var count;
-  	if (text[0] == '0') {
-  		if (text[1] == undefined) { return 0 } 
-  		if (text[1] == '.') {
-  			count = 2;
-  			while ((/[0-9]/).test(text[count])) { count++; }
-  			if (count == text.length) { return parseFloat(text) }
-  		}
-  		throw new Exception('flawed json, was expecting a valid number');
-  	}
-  	if ((/[1-9]/).test(text[0])) {
-  		count = 1;
-  		while ((/[0-9]/).test(text[count])) { count++ }
-  		if (count == text.length) { return parseInt(text) }
-  		if (text[count] == '.') {
-  			count++;
-  			while ((/[0-9]/).test(text[count])) { count++ }
-  			if (count == text.length) { return parseFloat(text) }
-  		}
-  	}
-  	throw new Exception('flawed json, was expecting a valid number');
+  	
   }
 
   // Function for parsing strings - INCOMPLETE
   var phrase = function(text) {
-  	var count = 1;
-  	var word = '';
-  	while (text[count] != '"'){
-  		if (text[count] == '\\')
-  		word += text[count];
-  		count++;
-  		if (text[count] == undefined) {
-  			throw new Exception('flawed json, was expecting \'"\'');
-  		}
-  	}
-  	return word;
+  	
 	}
 
-
-  // If parsing an array
-  if (json[index] == '[') {
-  	if (json[index+1] == ']') {
-  		return [];
-  	} else if (json)
+  // Function for parsing arrays - INCOMPLETE
+  var array = function(text) {
   	
-
   }
-};
+
+  var obj = function(text) {
+  	
+  }
+  return parse(json);
+}; 
