@@ -49,6 +49,7 @@ var parseJSON = function(json) {
     }
 
     throw undefined;
+
   };
 
   //Parse a number
@@ -73,7 +74,7 @@ var parseJSON = function(json) {
       }
     }
     number = +number;
-    if (isNaN(number)) { throw undefined }
+    if (isNaN(number)) { throw undefined } 
 
     return number;
     
@@ -87,8 +88,8 @@ var parseJSON = function(json) {
     if (cap == '"') {
       while (nextChar()) {
         if (cap == '"') {
-           nextChar();
-           return string;
+          nextChar();
+          return string;
         } 
         if (cap == '\\') {
           nextChar();
@@ -107,8 +108,68 @@ var parseJSON = function(json) {
     }
 
     throw undefined;
+
+  };
+
+  //Parse an array value
+  var array = function () {
+
+    var array = [];
+
+    if (cap == '[') {
+      nextChar();
+      skip();
+      if (cap == ']') {
+        nextChar();
+        return [];
+      }
+      while (cap) {
+        array.push(parse()); // parse function not made yet
+        skip();
+        if (cap == ']') {
+          nextChar();
+          return array;
+        }
+        nextChar(',');
+        skip();
+      }
+    }
+
+    throw undefined;
+
+  };
+
+  //Parse an object
+  var object = function () {
+
+    var key;
+    var object = {};
+
+    if (cap == '{') {
+      nextChar();
+      skip();
+      if (cap == '}') {
+        nextChar();
+        return {};
+      }
+      while (cap) {
+        key = string();
+        skip();
+        nextChar(':');
+        object[key] = parse(); //parse function not made yet
+        skip();
+        if (cap == '}') {
+          nextChar();
+          return object;
+        }
+        nextChar(',');
+        skip();
+      }
+    }
+
+    throw undefined;
+
   };
 
   
-
 };
