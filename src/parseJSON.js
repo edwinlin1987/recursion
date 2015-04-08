@@ -4,14 +4,14 @@
 // but you're not, so you'll write it from scratch:
 var parseJSON = function(json) {
   // your code goes here
-  var index;     
-  var cap;     
+  var index = 0;     
+  var cap = ' ';     
 
   // Step through function
   var nextChar = function (item) {
 
     if (item && item !== cap) { throw undefined }
-    cap = text[index];
+    cap = json[index];
     index++;
     return cap;
 
@@ -124,7 +124,7 @@ var parseJSON = function(json) {
         return [];
       }
       while (cap) {
-        array.push(parse()); // parse function not made yet
+        array.push(parse());
         skip();
         if (cap == ']') {
           nextChar();
@@ -156,7 +156,7 @@ var parseJSON = function(json) {
         key = string();
         skip();
         nextChar(':');
-        object[key] = parse(); //parse function not made yet
+        object[key] = parse();
         skip();
         if (cap == '}') {
           nextChar();
@@ -171,5 +171,19 @@ var parseJSON = function(json) {
 
   };
 
-  
+  var parse = function () {
+
+    skip();
+    if (cap == '{') { return object() }
+    if (cap == '[') { return array() }
+    if (cap == '"') { return string() }
+    if (/\d/.test(cap) || (cap == '-')) { return number() }
+
+    return boolNull();
+
+  };
+
+  return parse();
+
+     
 };
