@@ -10,7 +10,7 @@ var parseJSON = function(json) {
   // Step through function
   var nextChar = function (item) {
 
-    if (item && item != cap) { throw undefined }
+    if (item && item !== cap) { throw undefined }
     cap = text[index];
     index++;
     return cap;
@@ -23,5 +23,92 @@ var parseJSON = function(json) {
     while (cap == ' ') { nextChar() }
 
   };
+
+  //Parse a true, false, or null value
+  var boolNull = function () {
+
+    if (cap == 't') { 
+      nextChar('t');
+      nextChar('r');
+      nextChar('u');
+      nextChar('e');
+      return true; 
+    } else if (cap == 'f') { 
+      nextChar('f');
+      nextChar('a');
+      nextChar('l');
+      nextChar('s');
+      nextChar('e');
+      return false; 
+    } else if (cap == 'n') { 
+      nextChar('n');
+      nextChar('u');
+      nextChar('l');
+      nextChar('l');
+      return null; 
+    }
+
+    throw undefined;
+  };
+
+  //Parse a number
+  var number = function () {
+
+    var number = '';
+
+    if (cap == '-') {
+      number += '-';
+      nextChar();
+    }
+    while (/\d/.test(cap)) {
+      number += cap;
+      nextChar();
+    }
+    if (cap == '.') {
+      number += '.';
+      nextChar();
+      while (/\d/.test(cap)) {
+        number += cap;
+        nextChar();
+      }
+    }
+    number = +number;
+    if (isNaN(number)) { throw undefined }
+
+    return number;
+    
+  };
+
+  //Parse a string
+  var string = function () {
+
+    var string = '';
+
+    if (cap == '"') {
+      while (nextChar()) {
+        if (cap == '"') {
+           nextChar();
+           return string;
+        } 
+        if (cap == '\\') {
+          nextChar();
+          if (cap == '\\') { string += '\\' }
+          if (cap == '"') { string += '\"' }
+          if (cap == 'n') { string += '\n' }
+          if (cap == 'r') { string += '\r' }
+          if (cap == 'v') { string += '\v' }
+          if (cap == 't') { string += '\t' }
+          if (cap == 'b') { string += '\b' }
+          if (cap == 'f') { string += '\f' }
+        } else {
+          string += cap;
+        }
+      }
+    }
+
+    throw undefined;
+  };
+
+  
 
 };
